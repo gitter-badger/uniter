@@ -45,6 +45,11 @@ define([
             if (splStack) {
                 util.each(splStack, function (autoloadCallable) {
                     autoloadCallable.call([autoloader.valueFactory.createString(name)], globalNamespace);
+
+                    if (globalNamespace.getClass(name)) {
+                        // Autoloader has defined the class: no need to call any further autoloaders
+                        return false;
+                    }
                 });
             } else {
                 magicAutoloadFunction = globalNamespace.getOwnFunction(MAGIC_AUTOLOAD_FUNCTION);
@@ -53,6 +58,28 @@ define([
                     magicAutoloadFunction(autoloader.valueFactory.createString(name));
                 }
             }
+        },
+
+        removeAutoloadCallable: function (autoloadCallable) {
+            var found = false,
+                splStack = this.splStack;
+
+            if (!splStack) {
+                // SPL stack has not been enabled: nothing to do
+                return false;
+            }
+
+            util.each(splStack, function (existingAutoloadCallable, index) {
+                // Callables may be different value types or different objects,
+                // so compare using the *Value API
+                if (existingAutoloadCallable.isEqualTo(autoloadCallable).getNative()) {
+                    found = true;
+                    splStack.splice(index, 1);
+                    return false;
+                }
+            });
+
+            return found;
         },
 
         setGlobalNamespace: function (globalNamespace) {

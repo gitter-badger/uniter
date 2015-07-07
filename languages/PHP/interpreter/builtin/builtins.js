@@ -11,6 +11,8 @@
 define([
     './functions/array',
     './functions/constant',
+    './functions/filesystem',
+    './functions/functionHandling',
     './functions/spl',
     './classes/stdClass',
     './functions/string',
@@ -22,6 +24,8 @@ define([
 ], function (
     arrayFunctions,
     constantFunctions,
+    filesystemFunctions,
+    functionHandlingFunctions,
     splFunctions,
     stdClass,
     stringFunctions,
@@ -43,6 +47,8 @@ define([
         functionGroups: [
             arrayFunctions,
             constantFunctions,
+            filesystemFunctions,
+            functionHandlingFunctions,
             splFunctions,
             stringFunctions,
             timeFunctions,

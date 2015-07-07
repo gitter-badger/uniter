@@ -240,6 +240,16 @@ define([
             return this.pointer;
         },
 
+        getValues: function () {
+            var values = [];
+
+            util.each(this.value, function (element) {
+                values.push(element.getValue());
+            });
+
+            return values;
+        },
+
         isEqualTo: function (rightValue) {
             return rightValue.isEqualToArray(this);
         },
@@ -323,6 +333,15 @@ define([
 
         onesComplement: function () {
             throw new PHPFatalError(PHPFatalError.UNSUPPORTED_OPERAND_TYPES);
+        },
+
+        push: function (otherValue) {
+            var value = this,
+                index = value.factory.createInteger(value.getLength());
+
+            value.getElementByKey(index).setValue(otherValue);
+
+            return value;
         },
 
         referToElement: function (key) {
